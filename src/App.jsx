@@ -1,9 +1,31 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Body from "./pages/Body";
+import Feed from "./pages/Feed";
+import Profile from "./pages/Profile";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+import Connections from "./pages/Connections";
+import Requests from "./pages/Requests";
+
+
 export default function App() {
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-900">
-      <h1 className="text-4xl font-bold text-white">
-        Hello World 🌎
-      </h1>
-    </div>
-  )
+    <>
+      <Provider store={appStore}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Body />}>
+              <Route index element={<Feed />} />
+              <Route path="/feed" element={<Feed />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/connections" element={<Connections />} />
+              <Route path="/requests" element={<Requests />} />
+            </Route>
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    </>
+  );
 }
