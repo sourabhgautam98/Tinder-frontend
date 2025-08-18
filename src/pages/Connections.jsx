@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { BASE_URL } from "../utils/constants";
 import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnection } from "../utils/connectionsSlice";
+import { Link } from "react-router-dom";
 
 const Connections = () => {
   const connections = useSelector((store) => store.connections);
   const dispatch = useDispatch();
-
   const fetchConnections = async () => {
     try {
       const res = await axios.get(BASE_URL + "/user/connections", {
@@ -15,6 +15,7 @@ const Connections = () => {
       });
       dispatch(addConnection(res.data.data));
     } catch (err) {
+      // Handle Error Case
       console.error(err);
     }
   };
@@ -23,52 +24,41 @@ const Connections = () => {
     fetchConnections();
   }, []);
 
-  if (!connections) return null;
+  if (!connections) return;
 
-  if (connections.length === 0)
-    return (
-      <h1 className="text-center text-xl font-semibold text-gray-600 mt-10">
-        No connections found
-      </h1>
-    );
+  if (connections.length === 0) return <h1> No Connections Found</h1>;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold text-center mb-8">Connections</h2>
+    <div className="text-center my-10">
+      <h1 className="text-bold text-white text-3xl">Connections</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-        {connections.map((connection) => {
-          const { _id, firstName, lastName, photoUrl, age, gender, skills } =
-            connection;
-          return (
-            <div
-              key={_id}
-              className="flex items-center p-6 rounded-xl bg-base-200 shadow-md hover:shadow-xl transition duration-300"
-            >
+      {connections.map((connection) => {
+        const { _id, firstName, lastName, photoUrl, age, gender, about } =
+          connection;
+
+        return (
+          <div
+            key={_id}
+            className="flex m-4 p-4 rounded-lg bg-base-300 w-1/2 mx-auto"
+          >
+            <div>
               <img
                 alt="photo"
-                className="w-24 h-24 rounded-full object-cover border-2 border-white shadow-md"
+                className="w-20 h-20 rounded-full object-cover"
                 src={photoUrl}
               />
-              <div className="text-left ml-6">
-                <h2 className="font-bold text-xl mb-1">
-                  {firstName + " " + lastName}
-                </h2>
-                {age && gender && (
-                  <p className="text-sm text-white-600">
-                    {age} • {gender}
-                  </p>
-                )}
-                <p className="mt-2 text-sm text-white-700">
-                  {skills?.join(", ") || "N/A"}
-                </p>
-              </div>
             </div>
-          );
-        })}
-      </div>
+            <div className="text-left mx-4 ">
+              <h2 className="font-bold text-xl">
+                {firstName + " " + lastName}
+              </h2>
+              {age && gender && <p>{age + ", " + gender}</p>}
+              <p>{about}</p>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
-
 export default Connections;
