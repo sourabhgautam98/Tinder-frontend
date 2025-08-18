@@ -63,6 +63,11 @@ const NavBar = () => {
                   Connections
                 </Link>
               </li>
+               <li>
+                <Link to="/requests" className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2">
+                  Requests
+                </Link>
+              </li>
               <li>
                 <a onClick={handleLogout} className="hover:bg-gray-700 rounded-lg px-3 py-2">Logout</a>
               </li>

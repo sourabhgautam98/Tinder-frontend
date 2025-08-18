@@ -37,12 +37,12 @@ const Connections = () => {
       <h2 className="text-3xl font-bold text-center mb-8">Connections</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-        {connections.map((connection, index) => {
-          const { firstName, lastName, photoUrl, age, gender, skills } =
+        {connections.map((connection) => {
+          const { _id, firstName, lastName, photoUrl, age, gender, skills } =
             connection;
           return (
             <div
-              key={index}
+              key={_id}
               className="flex items-center p-6 rounded-xl bg-base-200 shadow-md hover:shadow-xl transition duration-300"
             >
               <img
