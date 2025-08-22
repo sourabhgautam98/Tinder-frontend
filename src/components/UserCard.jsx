@@ -1,54 +1,85 @@
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../utils/feedSlice";
+
 const UserCard = ({ user }) => {
-  const { firstName, lastName, photoUrl, age, gender, skills } = user;
+  const { _id, firstName, lastName, photoUrl, age, gender, skills } = user;
+  const dispatch = useDispatch();
+
+  const handleSendRequest = async (status, userId) => {
+    try {
+      await axios.post(
+        `${BASE_URL}/request/send/${status}/${userId}`,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeUserFromFeed(userId));
+    } catch (err) {
+      console.error("Request failed", err);
+    }
+  };
+
+  // Format skills
+  const formattedSkills =
+    typeof skills === "string"
+      ? skills.split(",").map((skill) => skill.trim()).filter((skill) => skill.length > 0)
+      : Array.isArray(skills)
+      ? skills
+      : [];
 
   return (
-    <div className="card w-96 bg-base-300 shadow-xl rounded-2xl hover:shadow-2xl transition duration-300">
-      {/* Profile Image */}
-      <figure className="h-64 overflow-hidden">
+    <div className="card w-96 bg-gradient-to-br from-base-200 to-base-300 shadow-xl hover:shadow-2xl transition-all rounded-2xl overflow-hidden">
+      {/* User Image */}
+      <figure className="h-60 w-full overflow-hidden">
         <img
-          src={photoUrl || "https://via.placeholder.com/400x400?text=No+Image"}
-          alt={firstName + " " + lastName}
-          className="h-full w-full object-cover"
+          src={photoUrl}
+          alt={firstName}
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />
       </figure>
 
-      {/* Card Body */}
-      <div className="card-body items-center text-center">
-        {/* Name */}
-        <h2 className="card-title text-xl font-bold">
+      {/* Card Content */}
+      <div className="card-body">
+        <h2 className="card-title text-2xl font-extrabold text-white">
           {firstName} {lastName}
         </h2>
 
-        {/* Age + Gender */}
-        {(age || gender) && (
-          <p className="text-gray-500">
-            {age ? age : ""} 
-            {age && gender ? " • " : ""} 
-            {gender ? gender : ""}
+        {age && gender && (
+          <p className="text-sm text-white">
+            {age} years • {gender}
           </p>
         )}
 
-        {/* Skills */}
-        {skills?.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-2 mt-3">
-            {skills.map((skill, index) => (
-              <span
-                key={index}
-                className="badge badge-primary badge-outline px-3 py-1 text-sm rounded-full"
-              >
-                {skill}
-              </span>
-            ))}
+        {formattedSkills.length > 0 && (
+          <div className="mt-3">
+            <h3 className="text-sm font-semibold text-white mb-1">Skills:</h3>
+            <div className="flex flex-wrap gap-2">
+              {formattedSkills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="badge badge-primary badge-outline badge-sm py-1.5 px-2.5 rounded-md"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* Action Buttons */}
-        <div className="card-actions justify-center mt-4 space-x-4">
-          <button className="btn btn-outline btn-error px-6 rounded-full">
-            Ignore
+        {/* Actions */}
+        <div className="card-actions justify-center mt-4 gap-3">
+          <button
+            className="btn btn-outline btn-error w-1/2 rounded-xl hover:scale-105 transition-transform flex items-center gap-2"
+            onClick={() => handleSendRequest("ignored", _id)}
+          >
+            🚫 Ignore
           </button>
-          <button className="btn btn-primary px-6 rounded-full">
-            Interested
+          <button
+            className="btn btn-primary w-1/2 rounded-xl hover:scale-105 transition-transform flex items-center gap-2"
+            onClick={() => handleSendRequest("interested", _id)}
+          >
+            ⭐ Interested
           </button>
         </div>
       </div>

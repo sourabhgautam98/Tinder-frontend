@@ -6,91 +6,121 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("Sourabhgautam447@gmail.com");
+  const [emailId, setEmailId] = useState("Sourabh@gmail.com");
   const [password, setPassword] = useState("Sourabh11@");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [isLoginForm, setIsLoginForm] = useState(true);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      setLoading(true);
-      setError("");
       const res = await axios.post(
         BASE_URL + "/login",
         { emailId, password },
         { withCredentials: true }
       );
       dispatch(addUser(res.data));
-      navigate("/");
+      return navigate("/");
     } catch (err) {
-      console.error(err);
-      setError("Invalid email or password. Please try again.");
-    } finally {
-      setLoading(false);
+      setError(err?.response?.data || "Something went wrong");
+    }
+  };
+
+  const handleSignUp = async () => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/signup",
+        { firstName, lastName, emailId, password },
+        { withCredentials: true }
+      );
+      dispatch(addUser(res.data.data));
+      return navigate("/profile");
+    } catch (err) {
+      setError(err?.response?.data || "Something went wrong");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-900">
-      <div className="card bg-base-200 w-96 shadow-2xl rounded-2xl">
-        <div className="card-body">
-          {/* Title */}
-          <h2 className="card-title justify-center text-2xl font-bold text-white-500">
-            Login
-          </h2>
+    <div className="flex items-center justify-center min-h-screen bg-gray-900 p-4">
+      {/* Login Box */}
+      <div className="w-full max-w-md bg-black shadow-xl rounded-2xl p-8">
+        <h2 className="text-2xl font-bold text-center text-white mb-6">
+          {isLoginForm ? "Welcome Back 👋" : "Create Your Account ✨"}
+        </h2>
 
-          {/* Error message */}
-          {error && (
-            <div className="alert alert-error text-sm my-2">
-              {error}
-            </div>
+        <div className="space-y-4">
+          {!isLoginForm && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
+                />
+              </div>
+            </>
           )}
 
-          {/* Email */}
-          <label className="form-control w-full my-2">
-            <span className="label-text font-medium">Email ID</span>
+          <div>
+            <label className="block text-sm font-medium text-white mb-1">
+              Email
+            </label>
             <input
               type="email"
               value={emailId}
-              className="input input-bordered w-full"
               onChange={(e) => setEmailId(e.target.value)}
-              placeholder="Enter your email"
+              className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
             />
-          </label>
+          </div>
 
-          {/* Password */}
-          <label className="form-control w-full my-2">
-            <span className="label-text font-medium">Password</span>
+          <div>
+            <label className="block text-sm font-medium text-white mb-1">
+              Password
+            </label>
             <input
               type="password"
               value={password}
-              className="input input-bordered w-full"
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
             />
-          </label>
-
-          {/* Login button */}
-          <div className="card-actions justify-center mt-4">
-            <button
-              className="btn btn-primary w-full"
-              onClick={handleLogin}
-              disabled={loading}
-            >
-              {loading ? "Logging in..." : "Login"}
-            </button>
           </div>
-
-          {/* Extra */}
-          <p className="text-center text-sm text-gray-500 mt-3">
-            Don’t have an account?{" "}
-            <a href="/signup" className="text-white hover:underline">
-              Sign up
-            </a>
-          </p>
         </div>
+
+        {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
+
+        <button
+          className="btn btn-primary w-full mt-6 rounded-xl"
+          onClick={isLoginForm ? handleLogin : handleSignUp}
+        >
+          {isLoginForm ? "Login" : "Sign Up"}
+        </button>
+
+        <p
+          className="text-sm text-center mt-5 text-gray-300 cursor-pointer hover:text-blue-400 transition"
+          onClick={() => setIsLoginForm((value) => !value)}
+        >
+          {isLoginForm
+            ? "New here? Create an account"
+            : "Already have an account? Login"}
+        </p>
       </div>
     </div>
   );

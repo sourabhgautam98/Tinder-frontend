@@ -44,8 +44,8 @@ const EditProfile = ({ user }) => {
       setFirstName(user.firstName);
       setLastName(user.lastName);
       setPhotoUrl(user.photoUrl);
-      setAge(user.age);
-      setGender(user.gender);
+      setAge(user.age || "");
+      setGender(user.gender || "");
       setSkills(user.skills);
     }
   }, [user]);
