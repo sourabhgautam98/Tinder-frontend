@@ -16,37 +16,51 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    try {
-      const res = await axios.post(
-        BASE_URL + "/login",
-        { emailId, password },
-        { withCredentials: true }
-      );
-      dispatch(addUser(res.data));
-      return navigate("/");
-    } catch (err) {
-      setError(err?.response?.data || "Something went wrong");
-    }
-  };
+  try {
+    const res = await axios.post(
+      BASE_URL + "/auth/login",
+      { emailId, password },
+      { withCredentials: true }
+    );
 
-  const handleSignUp = async () => {
-    try {
-      const res = await axios.post(
-        BASE_URL + "/signup",
-        { firstName, lastName, emailId, password },
-        { withCredentials: true }
-      );
-      dispatch(addUser(res.data.data));
-      return navigate("/profile");
-    } catch (err) {
-      setError(err?.response?.data || "Something went wrong");
+    if (res.status === 200) {
+      const profileRes = await axios.get(BASE_URL + "/profile/view", {
+        withCredentials: true,
+      });
+
+      dispatch(addUser(profileRes.data));
+      navigate("/");
     }
-  };
+  } catch (err) {
+    setError(err?.response?.data || "Something went wrong");
+  }
+};
+
+const handleSignUp = async () => {
+  try {
+    const res = await axios.post(
+      BASE_URL + "/auth/signup",
+      { firstName, lastName, emailId, password },
+      { withCredentials: true }
+    );
+
+    if (res.status === 200) {
+      const profileRes = await axios.get(BASE_URL + "/profile/view", {
+        withCredentials: true,
+      });
+
+      dispatch(addUser(profileRes.data));
+      navigate("/profile");
+    }
+  } catch (err) {
+    setError(err?.response?.data || "Something went wrong");
+  }
+};
+
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 p-4">
-      {/* Login Box */}
-      <div className="w-full max-w-md bg-black shadow-xl rounded-2xl p-8">
+   <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 py-10 px-4">
+      <div className="w-full max-w-md bg-gradient-to-br from-gray-800 to-blue-900/70 shadow-xl rounded-2xl p-8">  
         <h2 className="text-2xl font-bold text-center text-white mb-6">
           {isLoginForm ? "Welcome Back 👋" : "Create Your Account ✨"}
         </h2>
