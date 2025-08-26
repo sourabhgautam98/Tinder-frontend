@@ -25,7 +25,7 @@ const NavBar = () => {
       {/* Brand */}
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost normal-case text-2xl font-bold tracking-wide">
-          👩‍💻 Tinder
+          👩‍💻 TrueMatch
         </Link>
       </div>
 
