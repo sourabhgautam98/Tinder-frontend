@@ -15,7 +15,7 @@ const UserCard = ({ user, onActionComplete }) => {
       setProcessing(true);
       setActionType(status);
       await axios.post(
-        `${BASE_URL}/request/send/${status}/${userId}`,
+        `${BASE_URL}/requests/send/${status}/${userId}`,
         {},
         { withCredentials: true }
       );

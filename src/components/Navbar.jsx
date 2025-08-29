@@ -1,9 +1,8 @@
 import axios from "axios";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
- 
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
@@ -11,10 +10,10 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try{
-     await axios.post(BASE_URL + "/auth/logout", {}, { withCredentials: true });
-     dispatch(removeUser());
-          return navigate("/login");
+    try {
+      await axios.post(BASE_URL + "/auth/logout", {}, { withCredentials: true });
+      dispatch(removeUser());
+      navigate("/login");
     } catch (err) {
       console.error(err);
     }
@@ -24,19 +23,21 @@ const NavBar = () => {
     <div className="navbar bg-gray-900 text-white shadow-md px-6">
       {/* Brand */}
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost normal-case text-2xl font-bold tracking-wide">
+        <Link
+          to="/"
+          className="btn btn-ghost normal-case text-2xl font-bold tracking-wide"
+        >
           👩‍💻 TrueMatch
         </Link>
       </div>
 
       {/* User Section */}
-      {user && (
+      {user ? (
         <div className="flex items-center gap-4">
           <span className="hidden sm:block text-lg font-medium">
             Welcome, <span className="text-white-400">{user.firstName}</span>
           </span>
 
-          {/* Avatar Dropdown */}
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -48,31 +49,53 @@ const NavBar = () => {
               </div>
             </div>
 
-            {/* Dropdown Menu */}
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 w-52 rounded-xl bg-gray-800 text-white p-2 shadow-xl border border-gray-700"
             >
               <li>
-                <Link to="/profile" className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2">
+                <Link
+                  to="/profile"
+                  className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2"
+                >
                   Profile
                 </Link>
               </li>
               <li>
-                <Link to="/connections" className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2">
+                <Link
+                  to="/connections"
+                  className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2"
+                >
                   Connections
                 </Link>
               </li>
-               <li>
-                <Link to="/requests" className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2">
+              <li>
+                <Link
+                  to="/requests"
+                  className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2"
+                >
                   Requests
                 </Link>
               </li>
               <li>
-                <a onClick={handleLogout} className="hover:bg-gray-700 rounded-lg px-3 py-2">Logout</a>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left hover:bg-gray-700 rounded-lg px-3 py-2"
+                >
+                  Logout
+                </button>
               </li>
             </ul>
           </div>
+        </div>
+      ) : (
+        <div>
+          <Link
+            to="/login"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium text-white shadow-md"
+          >
+            Login
+          </Link>
         </div>
       )}
     </div>

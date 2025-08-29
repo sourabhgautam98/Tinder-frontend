@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("Sourabh@gmail.com");
-  const [password, setPassword] = useState("Sourabh11@");
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
@@ -75,6 +75,7 @@ const handleSignUp = async () => {
                 <input
                   type="text"
                   value={firstName}
+                  placeholder="First Name"
                   onChange={(e) => setFirstName(e.target.value)}
                   className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
                 />
@@ -86,6 +87,7 @@ const handleSignUp = async () => {
                 <input
                   type="text"
                   value={lastName}
+                  placeholder="Last Name"
                   onChange={(e) => setLastName(e.target.value)}
                   className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
                 />
@@ -100,6 +102,7 @@ const handleSignUp = async () => {
             <input
               type="email"
               value={emailId}
+              placeholder="abc@example.com"
               onChange={(e) => setEmailId(e.target.value)}
               className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
             />
@@ -112,6 +115,7 @@ const handleSignUp = async () => {
             <input
               type="password"
               value={password}
+              placeholder="********"
               onChange={(e) => setPassword(e.target.value)}
               className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
             />
