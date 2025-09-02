@@ -96,7 +96,8 @@ const UserCard = ({ user, onActionComplete }) => {
                       d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                     />
                   </svg>
-                  {gender}
+                  {gender.charAt(0).toUpperCase() +
+                    gender.slice(1).toLowerCase()}
                 </span>
               )}
             </div>
@@ -127,7 +128,8 @@ const UserCard = ({ user, onActionComplete }) => {
                     key={index}
                     className="border border-blue-400 rounded-full px-3 py-1 text-sm bg-blue-900/20 text-blue-200"
                   >
-                    {skill}
+                    {skill.charAt(0).toUpperCase() +
+                      skill.slice(1).toLowerCase()}
                   </span>
                 ))}
                 {formattedSkills.length > 6 && (
