@@ -53,9 +53,11 @@ const Feed = () => {
 
   if (!feed || feed.length <= 0) {
     return (
-      <h1 className="flex justify-center my-10 text-white text-xl">
-        No new users found!
-      </h1>
+      <div className="flex items-center justify-center h-screen bg-black">
+        <h1 className="text-white text-xl text-center">
+          TrueMatch Find the Friends
+        </h1>
+      </div>
     );
   }
 
@@ -86,7 +88,7 @@ const Feed = () => {
             getFeed();
           }
         }}
-        onRemoveUser={() => handleRemoveUser(feed[currentIndex]._id)} 
+        onRemoveUser={() => handleRemoveUser(feed[currentIndex]._id)}
       />
     </div>
   );
