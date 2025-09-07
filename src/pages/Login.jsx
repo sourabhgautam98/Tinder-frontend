@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
+import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi"; // Importing icons
 
 const Login = () => {
   const [emailId, setEmailId] = useState("");
@@ -12,55 +13,56 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-  try {
-    const res = await axios.post(
-      BASE_URL + "/auth/login",
-      { emailId, password },
-      { withCredentials: true }
-    );
+    try {
+      const res = await axios.post(
+        BASE_URL + "/auth/login",
+        { emailId, password },
+        { withCredentials: true }
+      );
 
-    if (res.status === 200) {
-      const profileRes = await axios.get(BASE_URL + "/profile/view", {
-        withCredentials: true,
-      });
+      if (res.status === 200) {
+        const profileRes = await axios.get(BASE_URL + "/profile/view", {
+          withCredentials: true,
+        });
 
-      dispatch(addUser(profileRes.data));
-      navigate("/");
+        dispatch(addUser(profileRes.data));
+        navigate("/");
+      }
+    } catch (err) {
+      setError(err?.response?.data || "Something went wrong");
     }
-  } catch (err) {
-    setError(err?.response?.data || "Something went wrong");
-  }
-};
+  };
 
-const handleSignUp = async () => {
-  try {
-    const res = await axios.post(
-      BASE_URL + "/auth/signup",
-      { firstName, lastName, emailId, password },
-      { withCredentials: true }
-    );
+  const handleSignUp = async () => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/auth/signup",
+        { firstName, lastName, emailId, password },
+        { withCredentials: true }
+      );
 
-    if (res.status === 200) {
-      const profileRes = await axios.get(BASE_URL + "/profile/view", {
-        withCredentials: true,
-      });
+      if (res.status === 200) {
+        const profileRes = await axios.get(BASE_URL + "/profile/view", {
+          withCredentials: true,
+        });
 
-      dispatch(addUser(profileRes.data));
-      navigate("/profile");
+        dispatch(addUser(profileRes.data));
+        navigate("/profile");
+      }
+    } catch (err) {
+      setError(err?.response?.data || "Something went wrong");
     }
-  } catch (err) {
-    setError(err?.response?.data || "Something went wrong");
-  }
-};
-
+  };
 
   return (
-   <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 py-10 px-4">
-      <div className="w-full max-w-md bg-gradient-to-br from-gray-800 to-blue-900/70 shadow-xl rounded-2xl p-8">  
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 py-10 px-4">
+      <div className="w-full max-w-md bg-gradient-to-br from-gray-800 to-blue-900/70 shadow-xl rounded-2xl p-8">
         <h2 className="text-2xl font-bold text-center text-white mb-6">
           {isLoginForm ? "Welcome Back 👋" : "Create Your Account ✨"}
         </h2>
@@ -112,13 +114,26 @@ const handleSignUp = async () => {
             <label className="block text-sm font-medium text-white mb-1">
               Password
             </label>
-            <input
-              type="password"
-              value={password}
-              placeholder="********"
-              onChange={(e) => setPassword(e.target.value)}
-              className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                placeholder="********"
+                onChange={(e) => setPassword(e.target.value)}
+                className="input input-bordered w-full rounded-xl bg-gray-800 text-white placeholder-gray-400 border-gray-600 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+              >
+                {showPassword ? (
+                  <HiOutlineEyeOff size={24} />
+                ) : (
+                  <HiOutlineEye size={24} />
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
