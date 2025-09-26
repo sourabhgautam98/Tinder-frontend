@@ -4,7 +4,7 @@ import { BASE_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
 
-const EditProfile = ({ user }) => {
+const EditProfile = ({ user, onClose }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
@@ -36,6 +36,10 @@ const EditProfile = ({ user }) => {
 
       dispatch(addUser(res.data.data));
       setMessage(res.data.message);
+      
+      setTimeout(() => {
+        onClose();
+      }, 2000);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update profile");
     } finally {
@@ -62,13 +66,20 @@ const EditProfile = ({ user }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 py-10 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-white mb-2">Edit Profile</h1>
-          <p className="text-blue-300">Update your personal information</p>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-white mb-2">Edit Profile</h1>
+            <p className="text-blue-300">Update your personal information</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-medium py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg"
+          >
+            Close
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Edit Form */}
           <div className="bg-gradient-to-br from-gray-800 to-blue-900/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-blue-700/30">
             <div className="space-y-4">
               <div>
@@ -130,7 +141,7 @@ const EditProfile = ({ user }) => {
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="w-full bg-gray-700/50 border border-blue-500/30 rounded-xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full bg-gray-700/50 border border-blue-500/30 rounded-xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="" disabled>
                     Select gender
@@ -158,43 +169,52 @@ const EditProfile = ({ user }) => {
                 />
               </div>
 
-              <button
-                onClick={saveProfile}
-                disabled={isSaving}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg disabled:opacity-50 disabled:transform-none"
-              >
-                {isSaving ? (
-                  <div className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Saving...
-                  </div>
-                ) : (
-                  "Save Profile"
-                )}
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={saveProfile}
+                  disabled={isSaving}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg disabled:opacity-50 disabled:transform-none"
+                >
+                  {isSaving ? (
+                    <div className="flex items-center justify-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Saving...
+                    </div>
+                  ) : (
+                    "Save Profile"
+                  )}
+                </button>
+                
+                <button
+                  onClick={onClose}
+                  disabled={isSaving}
+                  className="px-6 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-medium py-3 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg disabled:opacity-50 disabled:transform-none"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Preview Section */}
           <div className="bg-gradient-to-br from-gray-800 to-blue-900/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-blue-700/30">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">
               Profile Preview
@@ -205,7 +225,7 @@ const EditProfile = ({ user }) => {
                 <img
                   alt="profile preview"
                   className="w-24 h-24 rounded-2xl object-cover border-4 border-blue-500/30 shadow-lg"
-                  src={photoUrl}
+                  src={photoUrl || "/default-avatar.png"}
                 />
               </div>
 
@@ -263,7 +283,6 @@ const EditProfile = ({ user }) => {
         </div>
       </div>
 
-      {/* Floating Notifications */}
       {message && (
         <div className="fixed top-5 right-5 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg">
           {message}

@@ -63,6 +63,14 @@ const NavBar = () => {
               </li>
               <li>
                 <Link
+                  to="/feed"
+                  className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2"
+                >
+                  Find Friends
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/connections"
                   className="flex justify-between hover:bg-gray-700 rounded-lg px-3 py-2"
                 >

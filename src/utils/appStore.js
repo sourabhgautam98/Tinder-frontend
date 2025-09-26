@@ -11,6 +11,7 @@ const appStore = configureStore({
     feed: feedReducer,
     connections: connectionsReducer,
     requests: requestReducer,
+    
   },
 });
 
